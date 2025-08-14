@@ -1,0 +1,208 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Swagger Petstore
+  license:
+    name: MIT
+  description: "Магазин питомцев"
+servers:
+  - url: http://petstore.swagger.io/v1
+paths:
+  /v1/api/petsList: # @defects:[path-kebab-case,path-no-redundant-prefixes,offset-pagination:1:start,filtering:1:start]
+    get:
+      summary: List all pets(response can be more than 1 megabyte)
+      operationId: list_pets # @defects:[method-operation-id-camel-case]
+      tags:
+        - pets
+      parameters:
+        - name: request_id # @defects:[query-params-camel-case]
+          in: query
+          description: Request ID of the request
+          required: false
+          schema:
+            type: integer
+            maximum: 100
+            format: int32
+        - name: sort
+          in: query
+          schema:
+            type: string
+            example: { "created_at": "desc","username": "asc" }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Filter"
+      responses:
+        '200':
+          description: A paged array of pets
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pets'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' # @defects:[offset-pagination:1:end,filtering:1:end]
+    post:
+      summary: Create a pet
+      operationId: createPets
+      tags:
+        - pets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+        required: true
+      responses:
+        '201':
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v2/petstore/pets/{petId}:
+    get:
+      summary: Info for a specific pet
+      operationId: showPetById
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: The id of the pet to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put: # @defects:[method-request-response-components:1:start]
+      summary: Update a pet
+      operationId: updatePet
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: The id of the pet to update
+          schema:
+            type: string
+      requestBody:
+        description: Pet object that needs to be added to the store
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                petName:
+                  type: string
+                tag:
+                  type: string # @defects:[method-request-response-components:1:end]
+      responses:
+        '200':
+          description: Expected response to a valid request
+  /info: # @defects:[url-versioning]
+    get:
+      operationId: getInfo
+      description: Возвращает информацию о системе
+      responses:
+        '200':
+          description: Система работает стабильно
+        '400':
+          description: В системе есть ошибка
+  /v1/petstore/buy: # @defects:[use-correct-url-sequence:1:start]
+    get: # @defects:[use-correct-url-sequence:1:end]
+      operationId: buyPet
+      description: Удаляет из базы данных питомца
+      responses:
+        '200':
+          description: Питомец успешно продан
+components:
+  schemas:
+    Pet:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        pet_name: # @defects:[body-fields-camel-case]
+          type: string
+        tag:
+          type: string
+        status:
+          type: object
+          enum:
+            - ALIVE
+            - dead # @defects:[enum-discriminator-upper-snaker-case]
+        birthDate: # @defects:[date-time-format-iso-8601:1:start]
+          type: string
+          example: '19.10.2004'
+          description: Дата в формате dd.mm.yyyy # @defects:[date-time-format-iso-8601:1:end]
+        birthCountry: # @defects:[country-forma-iso-3166:1:start]
+          type: string
+          example: 'Russia'
+          description: Страна рождения # @defects:[country-forma-iso-3166:1:end]
+        amount:
+          type: number
+          description: Стоимость животного
+        currency: # @defects:[currency-format-iso-4217:1:start]
+          type: string
+          example: 'Dollars'
+          description: Валюта, в которой выражена стоимость животного # @defects:[currency-format-iso-4217:1:end]
+    Pets:
+      type: array
+      maxItems: 100
+      items:
+        $ref: '#/components/schemas/Pet'
+    Error: # @defects:[object-request-response-postfix,object-request-response-extraction:1:start]
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    Error2: # @defects:[object-request-response-postfix]
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string # @defects:[object-request-response-extraction:1:end]
+    Filter:
+      type: object
+      properties:
+        petNameLike:
+          type: string
