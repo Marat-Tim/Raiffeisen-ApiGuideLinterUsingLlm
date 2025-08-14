@@ -10,6 +10,8 @@ package io.github.marattim.raif_api_guide;
  *     <li>Если нужно удалить текст, то start и end указывают на начало и конец удаляемого текста, а replace равен
  *     пустой строке</li>
  * </ul>
+ * <p/>
+ * Идея взята из LSP протокола и легко в него интегрируется
  */
 public interface Suggestion {
     /**

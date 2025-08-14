@@ -1,4 +1,4 @@
-package io.github.marattim.raif_api_guide.llm_impl;
+package io.github.marattim.raif_api_guide.llm_impl.prompt;
 
 import io.github.marattim.raif_api_guide.Position;
 import io.github.marattim.raif_api_guide.Selection;
@@ -17,7 +17,7 @@ class FullLineSelection implements Selection {
 
     @Override
     public Position start() {
-        return new SimplePosition(number, 0);
+        return new SimplePosition(number, 1);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package io.github.marattim.raif_api_guide.llm_impl;
+package io.github.marattim.raif_api_guide.llm_impl.prompt;
 
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -7,10 +7,10 @@ import java.util.stream.IntStream;
  * Текст в который для каждой строки добавлен номер строки
  * (для того, чтобы llm работал лучше)
  */
-class TextWithNumbers {
+class TextWithNumberedLines {
     private final String text;
 
-    TextWithNumbers(String text) {
+    TextWithNumberedLines(String text) {
         this.text = text;
     }
 

@@ -11,11 +11,12 @@ repositories {
 
 dependencies {
     api(project(":core"))
-    implementation("com.openai:openai-java:1.3.1")
+    api("dev.langchain4j:langchain4j:1.2.0")
+    api("dev.langchain4j:langchain4j-core:1.2.0")
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("org.mockito:mockito-core:5.1.1")
+    testImplementation("org.mockito:mockito-core:5.11.0")
 }
 
 tasks.test {

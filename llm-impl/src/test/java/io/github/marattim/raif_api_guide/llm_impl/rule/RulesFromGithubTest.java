@@ -1,5 +1,6 @@
-package io.github.marattim.raif_api_guide.llm_impl;
+package io.github.marattim.raif_api_guide.llm_impl.rule;
 
+import io.github.marattim.raif_api_guide.llm_impl.Resource;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

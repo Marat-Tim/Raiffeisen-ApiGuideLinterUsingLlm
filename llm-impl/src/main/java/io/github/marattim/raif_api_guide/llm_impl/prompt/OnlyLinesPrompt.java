@@ -1,7 +1,8 @@
-package io.github.marattim.raif_api_guide.llm_impl;
+package io.github.marattim.raif_api_guide.llm_impl.prompt;
 
 import io.github.marattim.raif_api_guide.Defect;
 import io.github.marattim.raif_api_guide.SpecPart;
+import io.github.marattim.raif_api_guide.llm_impl.rule.Rule;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,6 +26,11 @@ public class OnlyLinesPrompt implements Prompt {
             Даже если ошибка в синтаксисе openapi
             Правило: %s
             """.formatted(rule.text());
+    }
+
+    @Override
+    public String transformedMessage(String message) {
+        return new TextWithNumberedLines(message).value();
     }
 
     @Override

@@ -1,11 +1,14 @@
 package io.github.marattim.raif_api_guide.llm_impl;
 
+import dev.langchain4j.model.chat.ChatModel;
 import io.github.marattim.raif_api_guide.Defect;
 import io.github.marattim.raif_api_guide.OpenApi;
 import io.github.marattim.raif_api_guide.SpecPart;
-import io.github.marattim.raif_api_guide.llm_impl.fake.FakeLlm;
+import io.github.marattim.raif_api_guide.llm_impl.fake.FakeChatModel;
 import io.github.marattim.raif_api_guide.llm_impl.fake.FakeRule;
 import io.github.marattim.raif_api_guide.llm_impl.fake.FakeSpecPart;
+import io.github.marattim.raif_api_guide.llm_impl.prompt.OnlyLinesPrompt;
+import io.github.marattim.raif_api_guide.llm_impl.rule.Rule;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -18,11 +21,14 @@ class OpenApiUsingLlmTest {
     void shouldReturnDefectParsedFromLlmResponse() {
         SpecPart part = new FakeSpecPart();
         Rule rule = new FakeRule();
-        Llm llm = new FakeLlm("1,3");
+        ChatModel llm = new FakeChatModel("1,3");
         OpenApi api = new OpenApiUsingLlm(
             Collections.singleton(part),
             Collections.singleton(rule),
-            llm
+            new MessagePipeline(
+                llm,
+                new OnlyLinesPrompt()
+            )
         );
         List<? extends Defect> defects = api.defects().toList();
         assertDefect(defects.get(0), part.line() + 1, rule.id());
