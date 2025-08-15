@@ -4,6 +4,8 @@ import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.request.ChatRequest;
 import dev.langchain4j.model.chat.response.ChatResponse;
 
+import java.time.Duration;
+
 public class LoggingChatModel implements ChatModel {
     private final ChatModel chatModel;
 
@@ -14,6 +16,10 @@ public class LoggingChatModel implements ChatModel {
     @Override
     public ChatResponse chat(ChatRequest chatRequest) {
         System.out.println("Делаем запрос");
-        return chatModel.chat(chatRequest);
+        long start = System.nanoTime();
+        ChatResponse response = chatModel.chat(chatRequest);
+        long end = System.nanoTime();
+        System.out.println("Запрос выполнен за " + Duration.ofNanos(end - start));
+        return response;
     }
 }

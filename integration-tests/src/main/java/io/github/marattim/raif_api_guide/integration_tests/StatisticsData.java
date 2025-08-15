@@ -13,11 +13,15 @@ public record StatisticsData(
     @Override
     public String toString() {
         return """
-            Сколько всего нашли ошибок: %s; \
-            Сколько всего ошибок было: %s; \
-            Существующие ошибки, которые мы нашли: %s; \
-            НЕ существующие ошибки, которые мы нашли: %s; \
-            существующие ошибки, которые мы НЕ нашли: %s"""
-            .formatted(positiveTotal, trueTotal, truePositive, falsePositive, trueNegative);
+            Сколько всего нашли ошибок: %s
+            
+            Сколько всего ошибок было: %s
+            
+            Существующие ошибки, которые мы нашли: %s
+            
+            НЕ существующие ошибки, которые мы нашли: %s
+            
+            существующие ошибки, которые мы НЕ нашли: %s
+            """.formatted(positiveTotal, trueTotal, truePositive, falsePositive, trueNegative);
     }
 }
