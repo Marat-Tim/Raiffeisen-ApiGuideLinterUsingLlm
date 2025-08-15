@@ -25,19 +25,23 @@ class StatisticsDuplicateTest {
             )
         ).value();
         
-        // The issue: currently truePositive might be 2 (both actual defects match)
-        // But trueTotal is 3 (total expected areas)
-        // This creates inconsistent statistics where we "found" more existing errors than exist
-        
-        System.out.println("Current result: " + result);
-        
-        // What we expect:
+        // Expected results:
         // - positiveTotal: 2 (total actual defects found)
         // - trueTotal: 3 (total expected areas) 
-        // - truePositive: should be 1 (only 1 expected area was actually matched)
-        // - falsePositive: should be 1 (1 actual defect that's a duplicate/false positive)
-        // - trueNegative: should be 2 (2 expected areas not matched)
+        // - truePositive: 1 (only 1 expected area was actually matched, despite 2 actual defects)
+        // - falsePositive: 1 (1 actual defect that's a duplicate/false positive)
+        // - trueNegative: 2 (2 expected areas not matched)
         
-        // The current implementation likely gives incorrect results due to double counting
+        Assertions.assertEquals(
+            new StatisticsData(
+                2,  // positiveTotal
+                3,  // trueTotal  
+                1,  // truePositive - should be 1, not 2
+                1,  // falsePositive - should be 1, not 0  
+                2   // trueNegative
+            ),
+            result,
+            "Statistics should not double-count when multiple actual defects match the same expected area"
+        );
     }
 }

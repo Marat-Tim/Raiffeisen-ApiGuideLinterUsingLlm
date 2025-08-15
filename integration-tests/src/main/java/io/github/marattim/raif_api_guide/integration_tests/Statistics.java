@@ -14,32 +14,37 @@ public class Statistics {
     }
 
     public StatisticsData value() {
-        int positiveTotal = 0;
-        int trueTotal = 0;
+        int positiveTotal = actual.size();
+        int trueTotal = expected.size();
+        
+        java.util.Set<ParsedDefectArea> matchedExpected = new java.util.HashSet<>();
         int truePositive = 0;
         int falsePositive = 0;
-        int trueNegative = 0;
-        main:
+        
         for (Defect defect : actual) {
-            ++positiveTotal;
+            boolean foundMatch = false;
             for (ParsedDefectArea area : expected) {
                 if (area.lines().contains(defect.selection()) && area.id().equals(defect.id())) {
-                    ++truePositive;
-                    continue main;
+                    if (!matchedExpected.contains(area)) {
+                        // First match for this expected area
+                        matchedExpected.add(area);
+                        truePositive++;
+                        foundMatch = true;
+                        break;
+                    } else {
+                        // This expected area was already matched - this is a duplicate
+                        foundMatch = false;
+                        break;
+                    }
                 }
             }
-            ++falsePositive;
-        }
-        main:
-        for (ParsedDefectArea area : expected) {
-            ++trueTotal;
-            for (Defect defect : actual) {
-                if (area.lines().contains(defect.selection()) && area.id().equals(defect.id())) {
-                    continue main;
-                }
+            if (!foundMatch) {
+                falsePositive++;
             }
-            ++trueNegative;
         }
+        
+        int trueNegative = trueTotal - matchedExpected.size();
+        
         return new StatisticsData(positiveTotal, trueTotal, truePositive, falsePositive, trueNegative);
     }
 }
