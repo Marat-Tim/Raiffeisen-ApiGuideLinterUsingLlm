@@ -2,6 +2,9 @@ package io.github.marattim.raif_api_guide.integration_tests;
 
 import java.util.stream.Collectors;
 
+/**
+ * Yaml, очищенный от комментариев, начинающихся с @defects
+ */
 public class YamlWithoutDefectsComments {
     private final String yaml;
 

@@ -6,13 +6,13 @@ import io.github.marattim.raif_api_guide.llm_impl.prompt.Prompt;
 
 import java.util.List;
 
-public class AllModelsTest {
+public class Main {
     public static void main(String[] args) {
         String url = System.getenv("LLM_API_URL");
         String apiKey = System.getenv("LLM_API_KEY");
 
         // Тут можно настроить какие именно модели тестируем
-        List<String> models = new ModelsToTest(
+        List<String> models = new OpenAiModelsFromApi(
             OpenAIOkHttpClient.builder()
                 .baseUrl(url)
                 .apiKey(apiKey)

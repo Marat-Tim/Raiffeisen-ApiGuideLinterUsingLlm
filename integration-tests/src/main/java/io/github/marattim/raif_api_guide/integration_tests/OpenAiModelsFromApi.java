@@ -5,10 +5,13 @@ import com.openai.models.models.Model;
 
 import java.util.stream.Stream;
 
-public class ModelsToTest {
+/**
+ * Список всех поддерживаемых моделей, взятых из OpenAi совместимого api
+ */
+public class OpenAiModelsFromApi {
     private final OpenAIClient client;
 
-    public ModelsToTest(OpenAIClient client) {
+    public OpenAiModelsFromApi(OpenAIClient client) {
         this.client = client;
     }
 

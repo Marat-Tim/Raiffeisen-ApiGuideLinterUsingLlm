@@ -6,6 +6,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Статистика по результатам тестирования.
+ * Список подсчитываемых данных смотри в {@link StatisticsData}
+ */
 public class Statistics {
     private final Collection<ParsedDefectArea> expected;
     private final Collection<Defect> actual;

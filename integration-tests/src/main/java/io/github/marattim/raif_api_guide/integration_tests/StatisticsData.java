@@ -2,6 +2,13 @@ package io.github.marattim.raif_api_guide.integration_tests;
 
 import org.jspecify.annotations.NonNull;
 
+/**
+ * @param positiveTotal Сколько всего ошибок нашел линтер
+ * @param trueTotal     Сколько всего ошибок было вручную отмечено в файле
+ * @param truePositive  Сколько ошибок, которые нашел линтер соответствуют вручную отмеченным
+ * @param falsePositive Сколько ошибок, которые нашел линтер НЕ соответствуют вручную отмеченным
+ * @param trueNegative  Сколько ошибок, которые были вручную отмечены не нашел линтер
+ */
 public record StatisticsData(
     int positiveTotal,
     int trueTotal,
