@@ -10,13 +10,13 @@ Always reference these instructions first and fallback to search or bash command
 - **Clean the project**: `./gradlew clean` - takes ~1 second
 - **Build the project (compile only)**: `./gradlew assemble` - takes 1-2 seconds. NEVER CANCEL. Set timeout to 120+ seconds for safety.
 - **Run specific module tests**:
-  - `./gradlew :core:test :integration-tests:test` - takes ~2 seconds. These tests ALWAYS PASS.
+  - `./gradlew :core:test` - takes ~2 seconds. These tests ALWAYS PASS.
   - `./gradlew :llm-impl:test` - takes ~2 seconds. All tests pass.
 - **Run all checks**: `./gradlew check` - takes ~2 seconds. All tests pass.
 - **Full build with tests**: `./gradlew build` - takes ~2 seconds. All tests pass.
 
 ### Java Version and Setup
-- **Java Version**: OpenJDK 17 (Temurin)
+- **Java Version**: OpenJDK 21 (Temurin)
 - **Build Tool**: Gradle 8.12 (auto-downloads on first use)
 - **First-time setup**: The Gradle wrapper will automatically download Gradle (~25 seconds) and dependencies
 
@@ -26,18 +26,16 @@ Always reference these instructions first and fallback to search or bash command
 - **integration-tests**: Quality analysis scripts for testing prompts and LLM models - requires external LLM API access
 
 ### Working with Tests
-- **Known Issue**: `OpenApiUsingLlmTest.shouldReturnDefectParsedFromLlmResponse()` in llm-impl module ALWAYS FAILS
-  - This is a known issue with character position assertions (expects 0, gets 1)
-  - The test uses mock LLM responses and should not require external API calls
-  - **WORKAROUND**: Use `./gradlew assemble` for builds or `./gradlew :core:test :integration-tests:test` for testing
-  - **Individual working tests**: Use `./gradlew :llm-impl:test --tests RulesFromGithubTest -q` to run specific passing tests
-- **Integration tests**: All pass but some require environment variables (`LLM_API_URL`, `LLM_API_KEY`) for actual LLM testing
+- The test uses mock LLM responses and should not require external API calls
+- **WORKAROUND**: Use `./gradlew assemble` for builds or `./gradlew :core:test` for testing
+- **Individual working tests**: Use `./gradlew :llm-impl:test --tests RulesFromGithubTest -q` to run specific passing tests
+- Test does not use many comments
 
 ## Validation Scenarios
 
 ### Basic Validation After Changes
 1. **Always build first**: `./gradlew assemble` - ensures compilation works
-2. **Run working tests**: `./gradlew :core:test :integration-tests:test` - validates core functionality
+2. **Run working tests**: `./gradlew :core:test` - validates core functionality
 3. **Check specific functionality**: Look at the integration-tests for examples of how the linter works with real OpenAPI specs
 
 ### Manual Testing Scenarios
