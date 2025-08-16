@@ -11,9 +11,9 @@ Always reference these instructions first and fallback to search or bash command
 - **Build the project (compile only)**: `./gradlew assemble` - takes 1-2 seconds. NEVER CANCEL. Set timeout to 120+ seconds for safety.
 - **Run specific module tests**:
   - `./gradlew :core:test :integration-tests:test` - takes ~2 seconds. These tests ALWAYS PASS.
-  - **WARNING**: `./gradlew :llm-impl:test` - HAS 1 FAILING TEST. Use `./gradlew :llm-impl:test --continue` if you need to run it.
-- **Run all checks**: `./gradlew check` - FAILS due to the failing test in llm-impl module
-- **Full build with tests**: `./gradlew build` - FAILS due to the failing test in llm-impl module
+  - `./gradlew :llm-impl:test` - takes ~2 seconds. All tests pass.
+- **Run all checks**: `./gradlew check` - takes ~2 seconds. All tests pass.
+- **Full build with tests**: `./gradlew build` - takes ~2 seconds. All tests pass.
 
 ### Java Version and Setup
 - **Java Version**: OpenJDK 17 (Temurin)
@@ -91,7 +91,7 @@ Always reference these instructions first and fallback to search or bash command
 
 ### Error Handling
 - **Compilation errors**: Always fixable - the project has a stable build configuration
-- **Test failures**: Expected in llm-impl module - use workarounds mentioned above
+- **Test failures**: All tests should pass - if any fail, investigate as it may indicate a real issue
 - **Dependency issues**: Rare - all dependencies are stable and well-defined
 - **Network issues**: May affect rule downloading in RulesFromGithub class during tests
 
