@@ -16,6 +16,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Эксперимент с одной моделью.
+ * Все параметры, результаты запуска и статистика
+ * выводятся в переданный поток вывода.
+ * Для оптимизации используются не все правила,
+ * а только те, которые есть в размеченном примере
+ */
 public class Experiment {
     private final PrintStream out;
     private final ExperimentParams params;

@@ -6,6 +6,9 @@ import dev.langchain4j.model.chat.response.ChatResponse;
 
 import java.time.Duration;
 
+/**
+ * Для возможности визуальной проверки, что модель не зависла
+ */
 public class LoggingChatModel implements ChatModel {
     private final ChatModel chatModel;
 

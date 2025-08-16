@@ -11,6 +11,9 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Параметры эксперимента для одной модели
+ */
 public record ExperimentParams(
     String model,
     double temperature,
@@ -29,6 +32,9 @@ public record ExperimentParams(
             """.formatted(model, temperature, prompt.getClass());
     }
 
+    /**
+     * Возвращает файл в который нужно записать результаты эксперимента
+     */
     public PrintStream file() {
         String path = "integration-tests/results/%s_%s.md"
             .formatted(

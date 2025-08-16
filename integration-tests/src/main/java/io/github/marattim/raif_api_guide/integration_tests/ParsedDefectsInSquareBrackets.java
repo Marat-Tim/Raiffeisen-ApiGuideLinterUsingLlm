@@ -6,6 +6,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+/**
+ * Список элементов, которые были указаны в yaml внутри квадратных скобок @defects[...].
+ *
+ * @see ParsedErrorsFromSpec
+ */
 public class ParsedDefectsInSquareBrackets {
     private static final Pattern pattern = Pattern.compile("@defects:\\[(.*?)]");
 
