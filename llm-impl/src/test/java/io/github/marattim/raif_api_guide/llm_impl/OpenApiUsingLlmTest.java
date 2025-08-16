@@ -36,8 +36,8 @@ class OpenApiUsingLlmTest {
     }
 
     private static void assertDefect(Defect defect, int line, String id) {
-        assertEquals(line, defect.selection().start().line());
-        assertEquals(0, defect.selection().start().character());
-        assertEquals(id, defect.id());
+        assertEquals(line, defect.selection().start().line(), "Неправильный номер строки");
+        assertEquals(1, defect.selection().start().character(), "Неправильный номер символа");
+        assertEquals(id, defect.id(), "Неправильный id правила");
     }
 }
