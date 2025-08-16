@@ -3,6 +3,8 @@ package io.github.marattim.raif_api_guide.integration_tests;
 import io.github.marattim.raif_api_guide.Defect;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Statistics {
     private final Collection<ParsedDefectArea> expected;
@@ -14,32 +16,29 @@ public class Statistics {
     }
 
     public StatisticsData value() {
-        int positiveTotal = 0;
-        int trueTotal = 0;
+        int positiveTotal = actual.size();
+        int trueTotal = expected.size();
+
+        Set<ParsedDefectArea> founded = new HashSet<>();
         int truePositive = 0;
         int falsePositive = 0;
-        int trueNegative = 0;
+
         main:
         for (Defect defect : actual) {
-            ++positiveTotal;
             for (ParsedDefectArea area : expected) {
                 if (area.lines().contains(defect.selection()) && area.id().equals(defect.id())) {
-                    ++truePositive;
-                    continue main;
+                    if (!founded.contains(area)) {
+                        founded.add(area);
+                        truePositive++;
+                        continue main;
+                    }
                 }
             }
-            ++falsePositive;
+            falsePositive++;
         }
-        main:
-        for (ParsedDefectArea area : expected) {
-            ++trueTotal;
-            for (Defect defect : actual) {
-                if (area.lines().contains(defect.selection()) && area.id().equals(defect.id())) {
-                    continue main;
-                }
-            }
-            ++trueNegative;
-        }
+
+        int trueNegative = trueTotal - founded.size();
+        
         return new StatisticsData(positiveTotal, trueTotal, truePositive, falsePositive, trueNegative);
     }
 }
