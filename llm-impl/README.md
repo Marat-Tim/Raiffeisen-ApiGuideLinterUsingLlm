@@ -17,13 +17,9 @@ OpenApi api = new OpenApiUsingLlm(
     ),
     System.getenv("LLM_API_KEY")
 );
-api.
-
-defects().
-
-forEach(
+api.defects().forEach(
     defect ->...
-    );
+);
 ```
 
 ## Детали реализации

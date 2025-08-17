@@ -26,6 +26,7 @@ public class OnlyGoodGithubRules implements Streamable<Rule> {
         this.value = value;
     }
 
+    @Override
     public Stream<Rule> stream() {
         return value.stream().filter(
             rule -> !BAD.contains(rule.id())

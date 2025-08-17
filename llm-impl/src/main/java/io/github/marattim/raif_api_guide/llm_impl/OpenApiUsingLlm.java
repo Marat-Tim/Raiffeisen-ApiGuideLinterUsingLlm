@@ -31,7 +31,7 @@ public class OpenApiUsingLlm implements OpenApi {
             new OnlyGoodGithubRules().stream().toList(),
             new MessagePipeline(
                 OpenAiChatModel.builder()
-                    .baseUrl(System.getenv("LLM_API_URL"))
+                    .baseUrl(safeEnvGet("LLM_API_URL"))
                     .apiKey(apiKey)
                     .modelName("medium")
                     .timeout(Duration.ofSeconds(10))
@@ -60,6 +60,14 @@ public class OpenApiUsingLlm implements OpenApi {
                         ).stream()
                     )
             );
+    }
+
+    private static String safeEnvGet(String name) {
+        String value = System.getenv(name);
+        if (value == null) {
+            throw new RuntimeException("Необходимо объявить переменную окружения " + name);
+        }
+        return value;
     }
 
 }
