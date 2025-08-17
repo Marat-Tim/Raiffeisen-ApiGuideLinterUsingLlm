@@ -1,4 +1,4 @@
-package io.github.marattim.raif_api_guide.llm_impl;
+package io.github.marattim.raif_api_guide.common;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -78,4 +78,15 @@ class ParsedErrorsFromSpecTest {
             ).stream().map(ParsedDefectArea::id).collect(Collectors.toSet())
         );
     }
+
+    @Test
+    void shouldParseFixedIds() {
+//        Assertions.assertEquals(
+//            Set.of(
+//            ),
+////            new ParsedErrorsFromSpec(
+////                new Resource("")
+////            )
+//        );
+    }
 }
