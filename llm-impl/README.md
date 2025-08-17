@@ -1,5 +1,33 @@
 # Реализация линтера с помощью llm
 
+## Использование
+
+```java
+OpenApi api = new OpenApiUsingLlm(
+    new FullSpec(
+        """
+            openapi: 3.0.0
+            paths:
+              /user:
+                get:
+                  responses:
+                    200:
+                      description: OK
+            """
+    ),
+    System.getenv("LLM_API_KEY")
+);
+api.
+
+defects().
+
+forEach(
+    defect ->...
+    );
+```
+
+## Детали реализации
+
 Для взаимодействия с llm используется библиотека
 [langchain4j](https://github.com/langchain4j/langchain4j), 
 поэтому есть совместимость как с моделями openai, 
@@ -11,6 +39,9 @@
 - Набор правил
 - Open api спецификация, разделенная на части
 - Пайплайн обработки одного правила и части спецификации
+
+В нем предусмотрен конструктор без аргументов.
+Он задает параметры, которые показали себя лучше всего в экспериментах
 
 Пример использования можно найти в юнит тестах 
 или в модуле [integration-tests](./../integration-tests)
@@ -26,3 +57,11 @@
 в котором находится пример реализации [простого промпта](./src/main/java/io/github/marattim/raif_api_guide/llm_impl/prompt/OnlyLinesPrompt.java) 
 - [rule](./src/main/java/io/github/marattim/raif_api_guide/llm_impl/rule),
 в котором есть парсинг [списка всех правил из репозитория Райфа](https://github.com/Raiffeisen-DGTL/rest-api-guide/blob/main/rules/rules.md)
+
+## Проблемы
+
+- В основном я использую внутри банковские модели для экспериментов.
+  По соображения безопасности я не хочу публиковать их url, поэтому использую
+  ```java
+  System.getenv("LLM_API_URL")
+  ```

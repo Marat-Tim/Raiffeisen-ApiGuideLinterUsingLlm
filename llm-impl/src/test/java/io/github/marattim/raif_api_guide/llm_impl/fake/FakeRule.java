@@ -1,7 +1,7 @@
 package io.github.marattim.raif_api_guide.llm_impl.fake;
 
 import io.github.marattim.raif_api_guide.Severity;
-import io.github.marattim.raif_api_guide.llm_impl.Resource;
+import io.github.marattim.raif_api_guide.common.Resource;
 import io.github.marattim.raif_api_guide.llm_impl.rule.Rule;
 
 public class FakeRule implements Rule {

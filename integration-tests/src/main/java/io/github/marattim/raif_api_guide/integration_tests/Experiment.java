@@ -1,20 +1,13 @@
 package io.github.marattim.raif_api_guide.integration_tests;
 
-import dev.langchain4j.model.openai.OpenAiChatModel;
 import io.github.marattim.raif_api_guide.Defect;
-import io.github.marattim.raif_api_guide.llm_impl.MessagePipeline;
 import io.github.marattim.raif_api_guide.llm_impl.OpenApiUsingLlm;
-import io.github.marattim.raif_api_guide.llm_impl.part.SmallSpecPart;
-import io.github.marattim.raif_api_guide.llm_impl.prompt.OnlyLinesPrompt;
-import io.github.marattim.raif_api_guide.llm_impl.rule.RulesFromGithub;
+import io.github.marattim.raif_api_guide.llm_impl.part.FullSpec;
 
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Эксперимент с одной моделью.
@@ -25,59 +18,39 @@ import java.util.stream.Collectors;
  */
 public class Experiment {
     private final PrintStream out;
-    private final ExperimentParams params;
-    private final String apiKey;
 
-    public Experiment(PrintStream out, ExperimentParams params, String apiKey) {
+    public Experiment(PrintStream out) {
         this.out = out;
-        this.params = params;
-        this.apiKey = apiKey;
     }
 
     public void run() {
         try {
-            out.println("# Параметры");
-            out.println();
-            out.println(params);
-            out.println();
             out.println("# Запуск");
             out.println();
-            Set<String> ids = new ParsedErrorsFromSpec()
-                .stream()
-                .map(ParsedDefectArea::id)
-                .collect(Collectors.toSet());
             Path file = Path.of("./integration-tests/src/main/resources/example.yaml").toAbsolutePath();
-            List<Defect> defects = new OpenApiUsingLlm(
-                List.of(
-                    new SmallSpecPart(
-                        file,
+            List<Defect> defects = new LoggingOpenApi(
+                new OpenApiUsingLlm(
+                    new FullSpec(
                         Files.readString(file)
-                    )
-                ),
-                new RulesFromGithub()
-                    .stream()
-                    .filter(r -> ids.contains(r.id()))
-                    .toList(),
-                new MessagePipeline(
-                    new LoggingChatModel(
-                        OpenAiChatModel.builder()
-                            .baseUrl(params.url())
-                            .apiKey(apiKey)
-                            .temperature(0.0)
-                            .modelName(params.model())
-                            .maxRetries(10)
-                            .timeout(Duration.ofSeconds(10))
-                            .build()
                     ),
-                    new OnlyLinesPrompt()
+                    System.getenv("LLM_API_KEY")
                 )
             ).defects().toList();
             defects.forEach(
                 defect -> out.printf(
-                    "id=%s %s:%s%n%n",
+                    """
+                        - id: %s
+                        
+                          selection: %s,%s - %s,%s
+                        
+                          description: %s,
+                        """,
                     defect.id(),
-                    Path.of("").toAbsolutePath().relativize(defect.path()),
-                    defect.selection().start().line()
+                    defect.selection().start().line(),
+                    defect.selection().start().character(),
+                    defect.selection().end().line(),
+                    defect.selection().end().character(),
+                    defect.description()
                 )
             );
             out.println();

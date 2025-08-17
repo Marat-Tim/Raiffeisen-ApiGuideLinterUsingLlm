@@ -1,5 +1,5 @@
 plugins {
-    id("java")
+    id("java-library")
 }
 
 group = "ru.marattim"
@@ -10,9 +10,6 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":llm-impl"))
-    implementation(project(":common"))
-
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }

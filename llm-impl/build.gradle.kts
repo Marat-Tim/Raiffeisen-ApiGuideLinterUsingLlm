@@ -13,6 +13,8 @@ dependencies {
     api(project(":core"))
     api("dev.langchain4j:langchain4j:1.2.0")
     api("dev.langchain4j:langchain4j-core:1.2.0")
+    implementation("dev.langchain4j:langchain4j-open-ai:1.2.0")
+    implementation(project(":common"))
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")

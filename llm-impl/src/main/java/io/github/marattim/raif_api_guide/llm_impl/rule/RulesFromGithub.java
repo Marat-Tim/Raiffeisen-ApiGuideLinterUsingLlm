@@ -1,5 +1,7 @@
 package io.github.marattim.raif_api_guide.llm_impl.rule;
 
+import io.github.marattim.raif_api_guide.common.Streamable;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -11,7 +13,7 @@ import java.util.stream.Stream;
  * Список правил, скачанный с
  * <a href="https://github.com/Raiffeisen-DGTL/rest-api-guide/">гитхаб репозитория</a>
  */
-public class RulesFromGithub {
+public class RulesFromGithub implements Streamable<Rule> {
     private final String content;
 
     public RulesFromGithub() {
@@ -30,6 +32,7 @@ public class RulesFromGithub {
         this.content = content;
     }
 
+    @Override
     public Stream<Rule> stream() {
         return Arrays.stream(content.split("[^#]### "))
             .skip(1)

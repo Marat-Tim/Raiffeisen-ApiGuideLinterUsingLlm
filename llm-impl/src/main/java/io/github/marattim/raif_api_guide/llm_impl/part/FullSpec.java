@@ -19,6 +19,14 @@ public class FullSpec {
         this(new FilesInDirectoryAsSpecParts(dir).stream());
     }
 
+    public FullSpec(String yaml) {
+        this(
+            yaml,
+            Path.of("not-existing-file"),
+            300
+        );
+    }
+
     /**
      * Создает спецификацию из yaml текста и абсолютного пути к файлу,
      * который содержит данный yaml
