@@ -1,6 +1,7 @@
 package io.github.marattim.raif_api_guide.integration_tests;
 
 import io.github.marattim.raif_api_guide.Defect;
+import io.github.marattim.raif_api_guide.common.Timed;
 import io.github.marattim.raif_api_guide.llm_impl.OpenApiUsingLlm;
 import io.github.marattim.raif_api_guide.llm_impl.part.FullSpec;
 
@@ -10,11 +11,9 @@ import java.nio.file.Path;
 import java.util.List;
 
 /**
- * Эксперимент с одной моделью.
- * Все параметры, результаты запуска и статистика
- * выводятся в переданный поток вывода.
- * Для оптимизации используются не все правила,
- * а только те, которые есть в размеченном примере
+ * Эксперимент с одной конкретной реализацией.
+ * Все результаты запуска и статистика
+ * выводятся в переданный поток вывода
  */
 public class Experiment {
     private final PrintStream out;
@@ -28,14 +27,18 @@ public class Experiment {
             out.println("# Запуск");
             out.println();
             Path file = Path.of("./integration-tests/src/main/resources/example.yaml").toAbsolutePath();
-            List<Defect> defects = new LoggingOpenApi(
-                new OpenApiUsingLlm(
-                    new FullSpec(
-                        Files.readString(file)
-                    ),
-                    System.getenv("LLM_API_KEY")
-                )
-            ).defects().toList();
+
+            Timed.Result<List<Defect>> timed = new Timed<>(
+                new LoggingOpenApi(
+                    new OpenApiUsingLlm(
+                        new FullSpec(
+                            Files.readString(file)
+                        ),
+                        System.getenv("LLM_API_KEY")
+                    )
+                ).defects()::toList
+            ).value();
+            List<Defect> defects = timed.result();
             defects.forEach(
                 defect -> out.printf(
                     """
@@ -43,7 +46,8 @@ public class Experiment {
                         
                           selection: %s,%s - %s,%s
                         
-                          description: %s,
+                          description: %s
+                        
                         """,
                     defect.id(),
                     defect.selection().start().line(),
@@ -55,6 +59,8 @@ public class Experiment {
             );
             out.println();
             out.println("# Результаты");
+            out.println();
+            out.println("Время выполнения: " + timed.duration());
             out.println();
             out.println(
                 new Statistics(

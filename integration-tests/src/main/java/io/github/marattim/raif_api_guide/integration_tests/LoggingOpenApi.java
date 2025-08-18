@@ -3,8 +3,8 @@ package io.github.marattim.raif_api_guide.integration_tests;
 import io.github.marattim.raif_api_guide.Defect;
 import io.github.marattim.raif_api_guide.OpenApi;
 import io.github.marattim.raif_api_guide.common.StreamFromIterator;
+import io.github.marattim.raif_api_guide.common.Timed;
 
-import java.time.Duration;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
@@ -23,12 +23,10 @@ public class LoggingOpenApi implements OpenApi {
             new Iterator<>() {
                 @Override
                 public boolean hasNext() {
-                    long start = System.nanoTime();
                     System.out.println("Получаем очередной дефект");
-                    boolean hn = iterator.hasNext();
-                    long end = System.nanoTime();
-                    System.out.println("Получили за " + Duration.ofNanos(end - start));
-                    return hn;
+                    Timed.Result<Boolean> timed = new Timed<>(iterator::hasNext).value();
+                    System.out.println("Получили за " + timed.duration());
+                    return timed.result();
                 }
 
                 @Override
