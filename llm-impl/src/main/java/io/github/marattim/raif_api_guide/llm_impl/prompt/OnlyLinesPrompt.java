@@ -18,7 +18,10 @@ public class OnlyLinesPrompt implements Prompt {
         return """
             У меня есть правило оформления open api.
             Найди в переданной части спецификации нарушения правила.
-            Для найденных ошибок напиши через запятую номера строк без пробелов.
+            Для каждой найденной ошибки на новой строке пиши номер строки и через запятую объяснение почему это ошибка.
+            Например:
+            3,потому что getAll не в kebab-case
+            Не пиши в объяснении id ошибки.
             Если ошибок нет, то напиши одну цифру - 0.
             Больше ничего писать не нужно.
             ОЧЕНЬ ВАЖНО: Работай строго в соответствии с правилом.
@@ -35,25 +38,26 @@ public class OnlyLinesPrompt implements Prompt {
 
     @Override
     public Collection<? extends Defect> parsed(String response, SpecPart part, Rule rule) {
-        if (response.equals("0")) {
+        if (response.trim().equals("0")) {
             return Collections.emptyList();
         }
-        return Arrays.stream(response.split(","))
-            .map(Integer::parseInt)
+        return response.lines()
+            .map(line -> line.split(","))
             .map(
-                line -> new SimpleDefect(
-                    // TODO сделать выделение конкретных ошибок
-                    new FullLineSelection(
-                        line + part.line(),
-                        part.text().lines().toList().get(line - 1)
-                    ),
-                    rule.id(),
-                    rule.severity(),
-                    "https://github.com/Raiffeisen-DGTL/rest-api-guide/blob/main/rules/rules.md",
-                    part.path(),
-                    // TODO добавить авто исправления
-                    Stream.empty()
-                )
+                split -> {
+                    int line = Integer.parseInt(split[0].trim());
+                    return new SimpleDefect(
+                        new FullLineSelection(
+                            line + part.line(),
+                            part.text().lines().toList().get(line - 1)
+                        ),
+                        rule.id(),
+                        rule.severity(),
+                        split[1].trim(),
+                        part.path(),
+                        Stream.empty()
+                    );
+                }
             )
             .toList();
     }
