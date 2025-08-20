@@ -21,7 +21,7 @@ class OpenApiUsingLlmTest {
     void shouldReturnDefectParsedFromLlmResponse() {
         SpecPart part = new FakeSpecPart();
         Rule rule = new FakeRule();
-        ChatModel llm = new FakeChatModel("1,3");
+        ChatModel llm = new FakeChatModel("1,потому что\n3,потому что");
         OpenApi api = new OpenApiUsingLlm(
             Collections.singleton(part),
             Collections.singleton(rule),

@@ -33,7 +33,7 @@ public class OpenApiUsingLlm implements OpenApi {
                 OpenAiChatModel.builder()
                     .baseUrl(safeEnvGet("LLM_API_URL"))
                     .apiKey(apiKey)
-                    .modelName("medium")
+                    .modelName("ultra-coder")
                     .timeout(Duration.ofSeconds(10))
                     .maxRetries(10)
                     .build(),
